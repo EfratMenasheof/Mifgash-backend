@@ -8,15 +8,18 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000; // חשוב ל-Render
+
+// הפוך את origin לדינמי לפי הסביבה
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: CLIENT_ORIGIN,
   credentials: true,
 }));
 
 app.use(session({
-  secret: 'secretKey',
+  secret: process.env.SESSION_SECRET || 'secretKey',
   resave: false,
   saveUninitialized: false,
 }));
@@ -24,17 +27,20 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// כניסה עם גוגל
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
+// callback מהכניסה
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('http://localhost:5173/home');
+    res.redirect(`${CLIENT_ORIGIN}/home`);
   }
 );
 
+// משתמש מחובר
 app.get('/api/current-user', (req, res) => {
   if (req.user) {
     res.send(req.user);
@@ -43,6 +49,7 @@ app.get('/api/current-user', (req, res) => {
   }
 });
 
+// הרצת השרת
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
