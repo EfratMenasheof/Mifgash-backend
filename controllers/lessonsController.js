@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import fetch from 'node-fetch';
 
 export async function generateLesson(req, res) {
   const { language, topic } = req.body;
