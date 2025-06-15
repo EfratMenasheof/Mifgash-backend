@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 4000; // חשוב ל-Render
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
 app.use(cors({
-  origin: CLIENT_ORIGIN,
+  origin: CLIENT_ORIGIN || 'http://localhost:5173',
   credentials: true,
 }));
 
