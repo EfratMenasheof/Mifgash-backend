@@ -38,9 +38,12 @@ app.get('/auth/google',
 
 // callback מהכניסה
 app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
+  passport.authenticate('google', {
+    failureRedirect: '/', // או ל־/login
+    session: true,
+  }),
   (req, res) => {
-    res.redirect(`${CLIENT_ORIGIN}/home`);
+    res.redirect(process.env.CLIENT_ORIGIN || 'http://localhost:5173/home');
   }
 );
 
