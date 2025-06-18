@@ -4,6 +4,8 @@ import session from 'express-session';
 import passport from 'passport';
 import './passport.js';
 import dotenv from 'dotenv';
+import lessonsRoutes from './routes/lessonsRoutes.js';
+
 
 dotenv.config();
 
@@ -60,3 +62,6 @@ app.get('/api/current-user', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+app.use(express.json());
+app.use('/api/lessons', lessonsRoutes);
